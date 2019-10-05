@@ -1,6 +1,7 @@
 package com.applandeo.materialcalendarsampleapp;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
@@ -40,6 +41,9 @@ public class SetEventActivity extends AppCompatActivity {
             contentValues.put(DBHelper.KEY_DESCRIPTION, description);
 
             db.insert(DBHelper.TABLE_EVENTS, null, contentValues);
+
+            Intent intent = new Intent(this, CheckEvent.class);
+            startActivity(intent);
         });
     }
 }
