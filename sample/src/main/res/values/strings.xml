@@ -27,6 +27,10 @@
     <string name="material_calendar_today_button">Today</string>
     <string name="material_calendar_positive_button">OK</string>
     <string name="material_calendar_negative_button">Cancel</string>
+
     <string name="add" translatable="false">Add</string>
     <string name="find" translatable="false">Find</string>
+    <string name="add_event" translatable="false">add event</string>
+    <string name="current_events" translatable="false">Current events</string>
+    <string name="manage_events" translatable="false">manage events</string>
 </resources>

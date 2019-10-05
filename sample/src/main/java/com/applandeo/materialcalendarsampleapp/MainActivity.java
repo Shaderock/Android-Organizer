@@ -24,10 +24,10 @@ public class MainActivity extends AppCompatActivity {
 
         calendarView.setMinimumDate(min);
 
-        Button add_button = findViewById(R.id.add_button);
+        Button add_button = findViewById(R.id.check_button);
 
         add_button.setOnClickListener(view -> {
-            Intent intent = new Intent(this, EventActivity.class);
+            Intent intent = new Intent(this, CheckEvent.class);
             startActivity(intent);
         });
     }
