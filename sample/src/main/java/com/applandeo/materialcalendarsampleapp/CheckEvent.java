@@ -17,6 +17,7 @@ public class CheckEvent extends AppCompatActivity {
         add_event.setOnClickListener(view -> {
             Intent intent = new Intent(this, SetEventActivity.class);
             startActivity(intent);
+
         });
     }
 }
