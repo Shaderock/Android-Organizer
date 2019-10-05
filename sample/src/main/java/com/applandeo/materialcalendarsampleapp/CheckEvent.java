@@ -52,13 +52,16 @@ public class CheckEvent extends AppCompatActivity {
             do {
                 //write_events(cursor.getString(name_index));
                 arrayList.add(cursor.getString(name_index));
+                arrayList1.add("Delete");
             } while (cursor.moveToNext());
         } else {
             Log.d("mLog", "0 rows");
             cursor.close();
         }
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList);
+        ArrayAdapter arrayAdapter1 = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList1);
         event_list.setAdapter(arrayAdapter);
+        del_list.setAdapter(arrayAdapter1);
     }
 
     public void write_events(String name) {
