@@ -1,6 +1,7 @@
 package com.applandeo.materialcalendarsampleapp;
 
 import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -23,6 +24,7 @@ public class SetEventActivity extends AppCompatActivity {
     DBHelper dbHelper;
     int id = -1;
     String day;
+    String date;
     TimePicker timePicker;
     EditText event_name;
     EditText event_description;
@@ -35,6 +37,7 @@ public class SetEventActivity extends AppCompatActivity {
 
         Intent intent1 = getIntent();
         day = intent1.getStringExtra("chosen_date");
+        date = intent1.getStringExtra("date");
 
         Intent intent = getIntent();
         id = intent.getIntExtra("chosen_event", -1);
@@ -53,27 +56,17 @@ public class SetEventActivity extends AppCompatActivity {
 
         add_event.setOnClickListener(view ->
         {
-            add_event();
-            onBackPressed();
-        });
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(view -> {
-            Calendar c = Calendar.getInstance();
-
-            SimpleDateFormat df = new SimpleDateFormat("HH");
-            SimpleDateFormat df1 = new SimpleDateFormat("mm");
-
-            String formatted_date = df.format(c.getTime()) + ":"
-                    + df1.format(c.getTime());
-
-            Toast.makeText(getApplicationContext(),
-                    formatted_date,
-                    Toast.LENGTH_SHORT).show();
+            if (add_event())
+                onBackPressed();
+            else
+                Toast.makeText(getApplicationContext(),
+                        "Please, set future time",
+                        Toast.LENGTH_SHORT).show();
         });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public void add_event() {
+    public boolean add_event() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -81,6 +74,25 @@ public class SetEventActivity extends AppCompatActivity {
         String description = event_description.getText().toString();
         int hour = timePicker.getHour();
         int minute = timePicker.getMinute();
+
+        Calendar c = Calendar.getInstance();
+
+        SimpleDateFormat hour_format = new SimpleDateFormat("HH");
+        SimpleDateFormat minute_format = new SimpleDateFormat("mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        String cur_date = dateFormat.format(c.getTime());
+        String hour_str = hour_format.format(c.getTime());
+        String minute_str = minute_format.format(c.getTime());
+
+        if (cur_date.equals(date)) {
+            if (hour < Integer.parseInt(hour_str)
+                    || (hour == Integer.parseInt(hour_str)
+                    && minute <= Integer.parseInt(minute_str)))
+                return false;
+        }
+
+
 
         contentValues.put(DBHelper.KEY_NAME, name);
         contentValues.put(DBHelper.KEY_DESCRIPTION, description);
@@ -94,10 +106,20 @@ public class SetEventActivity extends AppCompatActivity {
             db.update(DBHelper.TABLE_EVENTS, contentValues,
                     "_id = ?", new String[]{String.valueOf(id)});
         }
+        return true;
     }
 
-    public void set_alarm() {
-        AlarmManager alarmManager= (AlarmManager) getSystemService(ALARM_SERVICE);
+    public void set_alarm(int id, int year, int month, int day, int hour, int min) {
+        Calendar cal = Calendar.getInstance();
+
+
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
+                id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+//                System.currentTimeMillis(), , pendingIntent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

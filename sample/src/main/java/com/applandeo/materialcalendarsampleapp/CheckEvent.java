@@ -19,6 +19,7 @@ public class CheckEvent extends AppCompatActivity {
     ListView del_list;
     ArrayList<Object> event_ids = new ArrayList<>();
     String day;
+    String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +28,13 @@ public class CheckEvent extends AppCompatActivity {
 
         Intent intent1 = getIntent();
         day = intent1.getStringExtra("chosen_date");
+        date = intent1.getStringExtra("date");
 
         Button add_event = findViewById(R.id.add_event);
         add_event.setOnClickListener(view -> {
             Intent intent = new Intent(this, SetEventActivity.class);
             intent.putExtra("chosen_date", day);
+            intent.putExtra("date", date);
             startActivity(intent);
         });
 
@@ -51,6 +54,7 @@ public class CheckEvent extends AppCompatActivity {
             Intent intent = new Intent(this, SetEventActivity.class);
             intent.putExtra("chosen_event", id);
             intent.putExtra("chosen_date", day);
+            intent.putExtra("date", date);
             startActivity(intent);
         }));
     }
