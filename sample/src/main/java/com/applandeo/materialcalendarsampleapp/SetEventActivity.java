@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -29,6 +30,10 @@ public class SetEventActivity extends AppCompatActivity {
     EditText event_name;
     EditText event_description;
 
+    String year_str;
+    String month_str;
+    String day_str;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,11 @@ public class SetEventActivity extends AppCompatActivity {
         Intent intent1 = getIntent();
         day = intent1.getStringExtra("chosen_date");
         date = intent1.getStringExtra("date");
+
+        year_str = intent1.getStringExtra("year");
+        month_str = intent1.getStringExtra("month");
+        day_str = intent1.getStringExtra("day");
+
 
         Intent intent = getIntent();
         id = intent.getIntExtra("chosen_event", -1);
@@ -92,8 +102,6 @@ public class SetEventActivity extends AppCompatActivity {
                 return false;
         }
 
-
-
         contentValues.put(DBHelper.KEY_NAME, name);
         contentValues.put(DBHelper.KEY_DESCRIPTION, description);
         contentValues.put(DBHelper.KEY_HOUR, hour);
@@ -106,20 +114,26 @@ public class SetEventActivity extends AppCompatActivity {
             db.update(DBHelper.TABLE_EVENTS, contentValues,
                     "_id = ?", new String[]{String.valueOf(id)});
         }
+
+        set_alarm(id, Integer.valueOf(year_str), Integer.valueOf(month_str),
+                Integer.valueOf(day_str), hour, minute);
+
         return true;
     }
 
     public void set_alarm(int id, int year, int month, int day, int hour, int min) {
         Calendar cal = Calendar.getInstance();
-
-
-
+        cal.setTimeInMillis(System.currentTimeMillis());
+        Log.d("log", String.valueOf(System.currentTimeMillis()));
+        cal.clear();
+        cal.set(year, month - 1, day, hour, min, 0);
+        Log.d("log", String.valueOf(cal.getTimeInMillis()));
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
-                id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//                System.currentTimeMillis(), , pendingIntent);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
+                intent, PendingIntent.FLAG_ONE_SHOT);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                cal.getTimeInMillis(), pendingIntent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

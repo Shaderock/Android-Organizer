@@ -33,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, CheckEvent.class);
             intent.putExtra("chosen_date", get_date_str());
             intent.putExtra("date", get_date());
+            intent.putExtra("year", get_date_year());
+            intent.putExtra("month", get_date_month());
+            intent.putExtra("day", get_date_day());
             startActivity(intent);
         });
     }
@@ -50,6 +53,35 @@ public class MainActivity extends AppCompatActivity {
             date = calendar.getTime();
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String date_str = simpleDateFormat.format(date);
+        return date_str;
+    }
+    public String get_date_year() {
+        Date date = null;
+        for (Calendar calendar : calendarView.getSelectedDates()) {
+            date = calendar.getTime();
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
+        String date_str = simpleDateFormat.format(date);
+        return date_str;
+    }
+
+    public String get_date_month() {
+        Date date = null;
+        for (Calendar calendar : calendarView.getSelectedDates()) {
+            date = calendar.getTime();
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM");
+        String date_str = simpleDateFormat.format(date);
+        return date_str;
+    }
+
+    public String get_date_day() {
+        Date date = null;
+        for (Calendar calendar : calendarView.getSelectedDates()) {
+            date = calendar.getTime();
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd");
         String date_str = simpleDateFormat.format(date);
         return date_str;
     }

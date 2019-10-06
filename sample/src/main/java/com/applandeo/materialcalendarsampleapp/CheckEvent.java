@@ -20,6 +20,9 @@ public class CheckEvent extends AppCompatActivity {
     ArrayList<Object> event_ids = new ArrayList<>();
     String day;
     String date;
+    String year_str;
+    String month_str;
+    String day_str;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +33,19 @@ public class CheckEvent extends AppCompatActivity {
         day = intent1.getStringExtra("chosen_date");
         date = intent1.getStringExtra("date");
 
+        year_str = intent1.getStringExtra("year");
+        month_str = intent1.getStringExtra("month");
+        day_str = intent1.getStringExtra("day");
+
+
         Button add_event = findViewById(R.id.add_event);
         add_event.setOnClickListener(view -> {
             Intent intent = new Intent(this, SetEventActivity.class);
             intent.putExtra("chosen_date", day);
             intent.putExtra("date", date);
+            intent.putExtra("year", year_str);
+            intent.putExtra("month", month_str);
+            intent.putExtra("day", day_str);
             startActivity(intent);
         });
 
@@ -55,6 +66,9 @@ public class CheckEvent extends AppCompatActivity {
             intent.putExtra("chosen_event", id);
             intent.putExtra("chosen_date", day);
             intent.putExtra("date", date);
+            intent.putExtra("year", year_str);
+            intent.putExtra("month", month_str);
+            intent.putExtra("day", day_str);
             startActivity(intent);
         }));
     }
