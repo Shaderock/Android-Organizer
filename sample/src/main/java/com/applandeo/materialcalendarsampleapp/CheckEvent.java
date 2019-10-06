@@ -35,14 +35,14 @@ public class CheckEvent extends AppCompatActivity {
             startActivity(intent);
         });
 
+        event_list = findViewById(R.id.event_list);
+        del_list = findViewById(R.id.del_list);
+
         write_events();
 
         del_list.setOnItemClickListener((adapterView, view, i, l) -> {
             int id = (int) event_ids.get(i);
-
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-            db.delete(DBHelper.TABLE_EVENTS, DBHelper.KEY_ID + "=" +
-                    id, null);
+            delete_event(id);
             refresh_events();
         });
 
@@ -67,20 +67,24 @@ public class CheckEvent extends AppCompatActivity {
         Cursor cursor = db.query(DBHelper.TABLE_EVENTS,
                 null, "day = ?", new String[]{day},
                 null, null, null);
-        event_list = findViewById(R.id.event_list);
-        del_list = findViewById(R.id.del_list);
         ArrayList<Object> names = new ArrayList<>();
         ArrayList<Object> arrayList = new ArrayList<>();
         event_ids.clear();
         if (cursor.moveToFirst()) {
             int id_index = cursor.getColumnIndex(DBHelper.KEY_ID);
             int name_index = cursor.getColumnIndex(DBHelper.KEY_NAME);
-            int desc_index = cursor.getColumnIndex(DBHelper.KEY_DESCRIPTION);
             int hour_index = cursor.getColumnIndex(DBHelper.KEY_HOUR);
             int minute_index = cursor.getColumnIndex(DBHelper.KEY_MINUTE);
             do {
-                names.add(cursor.getInt(hour_index) + ":"
-                        + cursor.getInt(minute_index) + " | "
+                String time = "";
+                if (cursor.getInt(hour_index) < 10)
+                    time += "0";
+                time += cursor.getInt(hour_index) + ":";
+                if (cursor.getInt(minute_index) < 10)
+                    time += "0";
+                time += cursor.getInt(minute_index);
+
+                names.add(time + " | "
                         + cursor.getString(name_index));
                 arrayList.add("Delete");
                 event_ids.add(cursor.getInt(id_index));
@@ -103,5 +107,11 @@ public class CheckEvent extends AppCompatActivity {
         del_list.setAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, new ArrayList<>()));
         write_events();
+    }
+
+    public void delete_event(int id) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.delete(DBHelper.TABLE_EVENTS, DBHelper.KEY_ID + "=" +
+                id, null);
     }
 }
