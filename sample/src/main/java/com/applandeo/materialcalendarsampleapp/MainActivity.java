@@ -12,12 +12,13 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
+    CalendarView calendarView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CalendarView calendarView = (CalendarView) findViewById(R.id.calendarView);
+        calendarView = (CalendarView) findViewById(R.id.calendarView);
 
         Calendar min = Calendar.getInstance();
         min.add(Calendar.DAY_OF_MONTH, -1);
@@ -28,7 +29,16 @@ public class MainActivity extends AppCompatActivity {
 
         add_button.setOnClickListener(view -> {
             Intent intent = new Intent(this, CheckEvent.class);
+            intent.putExtra("chosen_date", get_date());
             startActivity(intent);
         });
+    }
+
+    public String get_date() {
+        String chosen_date = null;
+        for (Calendar calendar : calendarView.getSelectedDates()) {
+            chosen_date = calendar.getTime().toString();
+        }
+        return chosen_date;
     }
 }

@@ -24,9 +24,14 @@ public class CheckEvent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_event);
 
+        Intent intent1 = getIntent();
+        String chosen_date;
+        chosen_date = intent1.getStringExtra("chosen_date");
+
         Button add_event = findViewById(R.id.add_event);
         add_event.setOnClickListener(view -> {
             Intent intent = new Intent(this, SetEventActivity.class);
+            intent.putExtra("chosen_date", chosen_date);
             startActivity(intent);
         });
 
@@ -63,8 +68,12 @@ public class CheckEvent extends AppCompatActivity {
             int id_index = cursor.getColumnIndex(DBHelper.KEY_ID);
             int name_index = cursor.getColumnIndex(DBHelper.KEY_NAME);
             int desc_index = cursor.getColumnIndex(DBHelper.KEY_DESCRIPTION);
+            int hour_index = cursor.getColumnIndex(DBHelper.KEY_HOUR);
+            int minute_index = cursor.getColumnIndex(DBHelper.KEY_MINUTE);
             do {
-                names.add(cursor.getString(name_index));
+                names.add( cursor.getInt(hour_index) + ":"
+                        + cursor.getInt(minute_index) + " | "
+                        + cursor.getString(name_index));
                 arrayList.add("Delete");
                 event_ids.add(cursor.getInt(id_index));
             } while (cursor.moveToNext());
