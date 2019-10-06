@@ -18,6 +18,7 @@ public class CheckEvent extends AppCompatActivity {
     ListView event_list;
     ListView del_list;
     ArrayList<Object> event_ids = new ArrayList<>();
+    String day;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +26,12 @@ public class CheckEvent extends AppCompatActivity {
         setContentView(R.layout.activity_check_event);
 
         Intent intent1 = getIntent();
-        String chosen_date;
-        chosen_date = intent1.getStringExtra("chosen_date");
+        day = intent1.getStringExtra("chosen_date");
 
         Button add_event = findViewById(R.id.add_event);
         add_event.setOnClickListener(view -> {
             Intent intent = new Intent(this, SetEventActivity.class);
-            intent.putExtra("chosen_date", chosen_date);
+            intent.putExtra("chosen_date", day);
             startActivity(intent);
         });
 
@@ -57,7 +57,7 @@ public class CheckEvent extends AppCompatActivity {
         dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.query(DBHelper.TABLE_EVENTS,
-                null, null, null,
+                null, "day = ?", new String[]{day},
                 null, null, null);
         event_list = findViewById(R.id.event_list);
         del_list = findViewById(R.id.del_list);
