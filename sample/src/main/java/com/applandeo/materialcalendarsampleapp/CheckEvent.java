@@ -45,6 +45,14 @@ public class CheckEvent extends AppCompatActivity {
                     id, null);
             refresh_events();
         });
+
+        event_list.setOnItemClickListener(((adapterView, view, i, l) -> {
+            int id = (int) event_ids.get(i);
+            Intent intent = new Intent(this, SetEventActivity.class);
+            intent.putExtra("chosen_event", id);
+            intent.putExtra("chosen_date", day);
+            startActivity(intent);
+        }));
     }
 
     @Override
@@ -71,7 +79,7 @@ public class CheckEvent extends AppCompatActivity {
             int hour_index = cursor.getColumnIndex(DBHelper.KEY_HOUR);
             int minute_index = cursor.getColumnIndex(DBHelper.KEY_MINUTE);
             do {
-                names.add( cursor.getInt(hour_index) + ":"
+                names.add(cursor.getInt(hour_index) + ":"
                         + cursor.getInt(minute_index) + " | "
                         + cursor.getString(name_index));
                 arrayList.add("Delete");
