@@ -121,6 +121,7 @@ public class SetEventActivity extends AppCompatActivity {
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void set_alarm(int id, int year, int month, int day, int hour, int min) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
@@ -130,9 +131,9 @@ public class SetEventActivity extends AppCompatActivity {
         Log.d("log", String.valueOf(cal.getTimeInMillis()));
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
-                intent, PendingIntent.FLAG_ONE_SHOT);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,
                 cal.getTimeInMillis(), pendingIntent);
     }
 
