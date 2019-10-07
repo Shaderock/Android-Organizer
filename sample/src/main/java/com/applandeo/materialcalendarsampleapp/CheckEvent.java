@@ -1,5 +1,6 @@
 package com.applandeo.materialcalendarsampleapp;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -56,6 +57,7 @@ public class CheckEvent extends AppCompatActivity {
 
         del_list.setOnItemClickListener((adapterView, view, i, l) -> {
             int id = (int) event_ids.get(i);
+            cancel_alarm(id);
             delete_event(id);
             refresh_events();
         });
@@ -88,6 +90,7 @@ public class CheckEvent extends AppCompatActivity {
         ArrayList<Object> names = new ArrayList<>();
         ArrayList<Object> arrayList = new ArrayList<>();
         event_ids.clear();
+
         if (cursor.moveToFirst()) {
             int id_index = cursor.getColumnIndex(DBHelper.KEY_ID);
             int name_index = cursor.getColumnIndex(DBHelper.KEY_NAME);
@@ -131,5 +134,12 @@ public class CheckEvent extends AppCompatActivity {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(DBHelper.TABLE_EVENTS, DBHelper.KEY_ID + "=" +
                 id, null);
+    }
+
+    public void cancel_alarm(int id) {
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id,
+                intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        pendingIntent.cancel();
     }
 }

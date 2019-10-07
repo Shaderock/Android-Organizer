@@ -110,13 +110,22 @@ public class SetEventActivity extends AppCompatActivity {
 
         if (id == -1) {
             db.insert(DBHelper.TABLE_EVENTS, null, contentValues);
+            SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+            Cursor cursor = sqLiteDatabase.query(DBHelper.TABLE_EVENTS,
+                    null, "day = ?", new String[]{day},
+                    null, null, null);
+            if (cursor.moveToLast()) {
+                int id_index = cursor.getColumnIndex(DBHelper.KEY_ID);
+                id = cursor.getInt(id_index);
+            }
+            cursor.close();
         } else {
             db.update(DBHelper.TABLE_EVENTS, contentValues,
                     "_id = ?", new String[]{String.valueOf(id)});
         }
-
         set_alarm(id, Integer.valueOf(year_str), Integer.valueOf(month_str),
                 Integer.valueOf(day_str), hour, minute);
+
 
         return true;
     }
