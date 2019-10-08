@@ -33,12 +33,12 @@ public class FoundEvent extends AppCompatActivity {
     {
         ArrayList<String> names = new ArrayList<>();
 
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         Cursor cursor = db.query(DBHelper.TABLE_EVENTS,
-                null, DBHelper.KEY_NAME + " LIKE ? OR (" +
+                null, "(" +
                         DBHelper.KEY_DESCRIPTION + " LIKE ?) OR (" +
-                        DBHelper.KEY_DAY + " LIKE ?)",
+                        DBHelper.KEY_NAME + " LIKE ?)",
                 new String[]{"%" + key_name + "%"},
                 null, null, null);
 
