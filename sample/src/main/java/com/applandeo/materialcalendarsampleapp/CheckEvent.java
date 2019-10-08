@@ -104,28 +104,28 @@ public class CheckEvent extends AppCompatActivity {
         ArrayList<Object> arrayList = new ArrayList<>();
         event_ids.clear();
 
-        if (cursor.moveToFirst()) {
-            int id_index = cursor.getColumnIndex(DBHelper.KEY_ID);
-            int name_index = cursor.getColumnIndex(DBHelper.KEY_NAME);
-            int hour_index = cursor.getColumnIndex(DBHelper.KEY_HOUR);
-            int minute_index = cursor.getColumnIndex(DBHelper.KEY_MINUTE);
-            do {
-                String time = "";
-                if (cursor.getInt(hour_index) < 10)
-                    time += "0";
-                time += cursor.getInt(hour_index) + ":";
-                if (cursor.getInt(minute_index) < 10)
-                    time += "0";
-                time += cursor.getInt(minute_index);
+            if (cursor.moveToFirst()) {
+                int id_index = cursor.getColumnIndex(DBHelper.KEY_ID);
+                int name_index = cursor.getColumnIndex(DBHelper.KEY_NAME);
+                int hour_index = cursor.getColumnIndex(DBHelper.KEY_HOUR);
+                int minute_index = cursor.getColumnIndex(DBHelper.KEY_MINUTE);
+                do {
+                    String time = "";
+                    if (cursor.getInt(hour_index) < 10)
+                        time += "0";
+                    time += cursor.getInt(hour_index) + ":";
+                    if (cursor.getInt(minute_index) < 10)
+                        time += "0";
+                    time += cursor.getInt(minute_index);
 
-                names.add(time + " | "
-                        + cursor.getString(name_index));
-                arrayList.add("Delete");
-                event_ids.add(cursor.getInt(id_index));
-            } while (cursor.moveToNext());
-        } else {
-            cursor.close();
-        }
+                    names.add(time + " | "
+                            + cursor.getString(name_index));
+                    arrayList.add("Delete");
+                    event_ids.add(cursor.getInt(id_index));
+                } while (cursor.moveToNext());
+            } else {
+                cursor.close();
+            }
 
         ArrayAdapter<Object> arrayAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, names);
