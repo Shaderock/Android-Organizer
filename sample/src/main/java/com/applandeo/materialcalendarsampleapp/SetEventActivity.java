@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -131,15 +130,16 @@ public class SetEventActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public void set_alarm(int id, int year, int month, int day, int hour, int min) {
+    public void set_alarm(int id, int year, int month,
+                          int day, int hour, int min) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
-        Log.d("log", String.valueOf(System.currentTimeMillis()));
         cal.clear();
+
         cal.set(year, month - 1, day, hour, min, 0);
-        Log.d("log", String.valueOf(cal.getTimeInMillis()));
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra("id", id);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP,
