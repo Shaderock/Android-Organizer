@@ -63,15 +63,28 @@ public class CheckEvent extends AppCompatActivity {
         });
 
         event_list.setOnItemClickListener(((adapterView, view, i, l) -> {
+            dbHelper = new DBHelper(this);
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
             int id = (int) event_ids.get(i);
-            Intent intent = new Intent(this, SetEventActivity.class);
-            intent.putExtra("chosen_event", id);
-            intent.putExtra("chosen_date", day);
-            intent.putExtra("date", date);
-            intent.putExtra("year", year_str);
-            intent.putExtra("month", month_str);
-            intent.putExtra("day", day_str);
-            startActivity(intent);
+            Cursor cursor = db.query(DBHelper.TABLE_EVENTS,
+                    null, "_id = ?", new String[]{String.valueOf(id)},
+                    null, null, null);
+
+            // to prevent user from editing already alarmed event
+
+            if (cursor.moveToFirst()) {
+                Intent intent = new Intent(this, SetEventActivity.class);
+                intent.putExtra("chosen_event", id);
+                intent.putExtra("chosen_date", day);
+                intent.putExtra("date", date);
+                intent.putExtra("year", year_str);
+                intent.putExtra("month", month_str);
+                intent.putExtra("day", day_str);
+                startActivity(intent);
+            }
+            else
+                refresh_events();
+            cursor.close();
         }));
     }
 

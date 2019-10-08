@@ -35,4 +35,5 @@
     <string name="manage_events" translatable="false">manage events</string>
     <string name="event_name" translatable="false">Event name</string>
     <string name="event_description" translatable="false">Event description</string>
+    <string name="found_events">Found events</string>
 </resources>

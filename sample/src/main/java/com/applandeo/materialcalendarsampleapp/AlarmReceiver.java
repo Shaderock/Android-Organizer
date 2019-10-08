@@ -60,5 +60,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setSmallIcon(R.drawable.sample_icon_2)
                 .build();
         nm.notify(0, notify);
+
+        Intent intent = new Intent(context, CheckEvent.class);
+
     }
 }

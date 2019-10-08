@@ -3,6 +3,7 @@ package com.applandeo.materialcalendarsampleapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,12 +16,15 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
 
     CalendarView calendarView;
+    EditText key_name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         calendarView = (CalendarView) findViewById(R.id.calendarView);
+        key_name = (EditText) findViewById(R.id.key_name);
 
         Calendar min = Calendar.getInstance();
         min.add(Calendar.DAY_OF_MONTH, -1);
@@ -38,6 +42,15 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("day", get_date_day());
             startActivity(intent);
         });
+
+        Button search_button = findViewById(R.id.search_button);
+
+        search_button.setOnClickListener(view ->
+        {
+            Intent intent = new Intent(this, FoundEvent.class);
+            intent.putExtra("key_name", key_name.getText().toString());
+            startActivity(intent);
+        });
     }
 
     public String get_date_str() {
@@ -47,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return chosen_date;
     }
+
     public String get_date() {
         Date date = null;
         for (Calendar calendar : calendarView.getSelectedDates()) {
@@ -56,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         String date_str = simpleDateFormat.format(date);
         return date_str;
     }
+
     public String get_date_year() {
         Date date = null;
         for (Calendar calendar : calendarView.getSelectedDates()) {
