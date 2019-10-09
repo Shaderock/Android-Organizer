@@ -28,13 +28,12 @@ public class FoundEvent extends AppCompatActivity {
         key_name = intent.getStringExtra("key_name");
         write_events();
     }
-    public void write_events()
-    {
+
+    public void write_events() {
         ArrayList<String> names = new ArrayList<>();
-
+        ArrayList<String> dates = new ArrayList<>();
+        ArrayList<String> times = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        // where ((description LIKE %test%) OR (name LIKE %test%))
 
         Cursor cursor = db.query(DBHelper.TABLE_EVENTS,
                 null, DBHelper.KEY_NAME + " LIKE ?",
@@ -46,25 +45,34 @@ public class FoundEvent extends AppCompatActivity {
             int name_index = cursor.getColumnIndex(DBHelper.KEY_NAME);
             int hour_index = cursor.getColumnIndex(DBHelper.KEY_HOUR);
             int minute_index = cursor.getColumnIndex(DBHelper.KEY_MINUTE);
+            int short_day_index = cursor.getColumnIndex(DBHelper.KEY_SHORT_DAY);
             do {
-                String time = "";
-                if (cursor.getInt(hour_index) < 10)
-                    time += "0";
-                time += cursor.getInt(hour_index) + ":";
-                if (cursor.getInt(minute_index) < 10)
-                    time += "0";
-                time += cursor.getInt(minute_index);
+                String time = get_formatted_time(cursor.getInt(hour_index),
+                        cursor.getInt(minute_index));
+                String date = cursor.getString(short_day_index);
 
-                names.add(time + " | "
-                        + cursor.getString(name_index));
+                names.add(cursor.getString(name_index));
+                dates.add(date);
+                times.add(time);
                 event_ids.add(cursor.getInt(id_index));
             } while (cursor.moveToNext());
         } else {
             cursor.close();
         }
 
-        EventAdapter eventAdapter = new EventAdapter(names, this);
+        EventAdapter eventAdapter = new EventAdapter(names,
+                this, times, dates);
         event_list.setAdapter(eventAdapter);
+    }
 
+    public String get_formatted_time(int hour, int minute) {
+        String time = "";
+        if (hour < 10)
+            time += "0";
+        time += hour + ":";
+        if (minute < 10)
+            time += "0";
+        time += minute;
+        return time;
     }
 }

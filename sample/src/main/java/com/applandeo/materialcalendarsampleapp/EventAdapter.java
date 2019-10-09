@@ -13,11 +13,17 @@ import java.util.ArrayList;
 
 public class EventAdapter extends BaseAdapter implements ListAdapter {
     private ArrayList<String> list;
+    private ArrayList<String> time_list;
+    private ArrayList<String> date_list;
     private Context context;
 
-    public EventAdapter(ArrayList<String> list, Context context) {
+    public EventAdapter(ArrayList<String> list, Context context,
+                        ArrayList<String> time_list,
+                        ArrayList<String> date_list) {
         this.list = list;
         this.context = context;
+        this.time_list = time_list;
+        this.date_list = date_list;
     }
 
     @Override
@@ -47,6 +53,12 @@ public class EventAdapter extends BaseAdapter implements ListAdapter {
         }
         TextView listItemText = (TextView) view.findViewById(R.id.list_item_string);
         listItemText.setText(list.get(position));
+
+        TextView date = (TextView) view.findViewById(R.id.date);
+        date.setText(date_list.get(position));
+
+        TextView time = (TextView) view.findViewById(R.id.time);
+        time.setText(time_list.get(position));
 
         ImageView del_button = (ImageView) view.findViewById(R.id.delete_btn);
 
