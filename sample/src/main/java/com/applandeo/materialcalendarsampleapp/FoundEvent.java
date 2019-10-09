@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,10 +34,10 @@ public class FoundEvent extends AppCompatActivity {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        // where ((description LIKE %test%) OR (name LIKE %test%))
+
         Cursor cursor = db.query(DBHelper.TABLE_EVENTS,
-                null, "(" +
-                        DBHelper.KEY_DESCRIPTION + " LIKE ?) OR (" +
-                        DBHelper.KEY_NAME + " LIKE ?)",
+                null, DBHelper.KEY_NAME + " LIKE ?",
                 new String[]{"%" + key_name + "%"},
                 null, null, null);
 
@@ -64,9 +63,8 @@ public class FoundEvent extends AppCompatActivity {
             cursor.close();
         }
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, names);
-        event_list.setAdapter(arrayAdapter);
+        EventAdapter eventAdapter = new EventAdapter(names, this);
+        event_list.setAdapter(eventAdapter);
 
     }
 }
