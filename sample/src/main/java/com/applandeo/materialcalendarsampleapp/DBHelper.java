@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "organizer_db";
     public static final String TABLE_EVENTS = "events";
 
@@ -16,7 +16,11 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String KEY_HOUR = "hour";
     public static final String KEY_MINUTE = "minute";
     public static final String KEY_DAY = "day";
-    public static final String KEY_SHORT_DAY = "shortDay";
+    public static final String KEY_SHORT_DATE = "shortDate";
+    public static final String KEY_ONLY_DAY = "shortDay";
+    public static final String KEY_ONLY_MONTH = "shortMonth";
+    public static final String KEY_ONLY_YEAR = "shortYear";
+
 
 
     public DBHelper(Context context) {
@@ -31,7 +35,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 + KEY_DESCRIPTION + " text,"
                 + KEY_HOUR + " integer,"
                 + KEY_MINUTE + " integer,"
-                + KEY_SHORT_DAY + " text,"
+                + KEY_SHORT_DATE + " text,"
+                + KEY_ONLY_DAY + " text,"
+                + KEY_ONLY_MONTH + " text,"
+                + KEY_ONLY_YEAR + " text,"
                 + KEY_DAY + " text )");
     }
 

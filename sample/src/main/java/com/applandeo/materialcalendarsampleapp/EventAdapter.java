@@ -1,6 +1,9 @@
 package com.applandeo.materialcalendarsampleapp;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +18,19 @@ public class EventAdapter extends BaseAdapter implements ListAdapter {
     private ArrayList<String> list;
     private ArrayList<String> time_list;
     private ArrayList<String> date_list;
+    private ArrayList<Object> event_ids;
+    DBHelper dbHelper;
     private Context context;
 
     public EventAdapter(ArrayList<String> list, Context context,
                         ArrayList<String> time_list,
-                        ArrayList<String> date_list) {
+                        ArrayList<String> date_list,
+                        ArrayList<Object> event_ids) {
         this.list = list;
         this.context = context;
         this.time_list = time_list;
         this.date_list = date_list;
+        this.event_ids = event_ids;
     }
 
     @Override
@@ -64,9 +71,25 @@ public class EventAdapter extends BaseAdapter implements ListAdapter {
 
         del_button.setOnClickListener(view1 -> {
             list.remove(position);
+            int id = (int) event_ids.get(position);
+            cancel_alarm(id);
+            delete_event(id);
             notifyDataSetChanged();
         });
 
         return view;
+    }
+
+    public void cancel_alarm(int id) {
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id,
+                intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        pendingIntent.cancel();
+    }
+    public void delete_event(int id) {
+        dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.delete(DBHelper.TABLE_EVENTS, DBHelper.KEY_ID + "=" +
+                id, null);
     }
 }

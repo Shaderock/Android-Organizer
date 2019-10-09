@@ -106,7 +106,10 @@ public class SetEventActivity extends AppCompatActivity {
         contentValues.put(DBHelper.KEY_HOUR, hour);
         contentValues.put(DBHelper.KEY_MINUTE, minute);
         contentValues.put(DBHelper.KEY_DAY, day);
-        contentValues.put(DBHelper.KEY_SHORT_DAY,
+        contentValues.put(DBHelper.KEY_ONLY_DAY, day_str);
+        contentValues.put(DBHelper.KEY_ONLY_MONTH, month_str);
+        contentValues.put(DBHelper.KEY_ONLY_YEAR, year_str);
+        contentValues.put(DBHelper.KEY_SHORT_DATE,
                 year_str + "/" + month_str + "/" + day_str);
 
         if (id == -1) {
